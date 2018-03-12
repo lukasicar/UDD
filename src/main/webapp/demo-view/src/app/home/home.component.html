@@ -1,0 +1,67 @@
+<h1>Pozdrav {{title}}</h1>
+<br/>
+<select [(ngModel)]="selectedValue" (change)="this.change(category)">
+	<option *ngFor="let category of categories" [ngValue]="category" >{{category.name}}</option>
+</select>
+<br/><br/>
+
+<table border="1">
+	<tr><th>Title</th><th>Author</th><th>Publication Year</th><th>Jezik</th><th>Izmjeni</th></tr>
+  	<tr *ngFor="let book of books">
+  		<td align="center">{{book.title}}</td>
+  		<td align="center">{{book.author}}</td>
+  		<td align="center">{{book.publicationYear}}</td>
+  		<td align="center">{{book.language.name}}</td>
+  		<td align="center"><span class="glyphicon glyphicon-pencil" (click)="modify(book)"></span></td>
+  	</tr>
+</table> 
+<br/><br/>
+<div class="row padding-class">
+	<div class="container col-sm-4">
+		<form [formGroup]="bookForm" (ngSubmit)="add()">
+			<div class="form-group row">
+				<label class="col-sm-6 col-form-label">Title</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" formControlName="title" reqired>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-6 col-form-label">Author</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" formControlName="author">
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-6 col-form-label">Publication year</label>
+				<div class="col-sm-6">
+					<input type="number" class="form-control" formControlName="publicationYear">
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-6 col-form-label">Language</label>
+				<div class="col-sm-6">
+					<select formControlName="language" [compareWith]="compareFn">
+						<option *ngFor="let language of languages" [ngValue]="language" >{{language.name}}</option>
+					</select>
+				</div>
+			</div><!--  
+			<div class="form-group row">
+				<label class="col-sm-6 col-form-label">Category</label>
+				<div class="col-sm-6">
+					<select formControlName="category" [compareWith]="compareFn">
+						<option *ngFor="let b of categories" [ngValue]="b">{{b.name}}</option>
+					</select>
+				</div>
+			</div> -->
+			<div align="left">
+				<button type="submit" class="btn btn-outline-dark">Dodaj/Izmjeni knjigu</button>
+			</div>
+		</form>
+	</div>
+</div>
+<input type="file" name="upload" accept="application/pdf" (change)="uploadFile($event)"/>
+<br/><br/><br/>
+
+<br/><br/><br/><br/><br/><br/><br/><br/>
+<br/>
+<button id="button-1" class="button" (click)='this.logout()'>Log out</button>
