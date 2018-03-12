@@ -1,6 +1,8 @@
 package com.example.demo.rest;
 
-import java.util.ArrayList;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.model.Category;
 import com.example.demo.model.E_Book;
@@ -18,6 +22,9 @@ import com.example.demo.model.Language;
 import com.example.demo.repository.BooksRepository;
 import com.example.demo.repository.CategoryRepository;
 import com.example.demo.repository.LanguageRepository;
+import com.lowagie.text.pdf.PdfReader;
+
+
 
 @RestController
 @RequestMapping(value = "/books")
@@ -53,8 +60,37 @@ public class BooksController {
 	
 	@PostMapping("/addBook")
 	public boolean addBook(@RequestBody E_Book e_book){
-		System.out.println(e_book.getId());
 		booksRepository.save(e_book);
 		return true;
 	}
+	
+	@PostMapping("/addFile")
+	public HashMap<String, String> addFile(@RequestParam("file") MultipartFile file) {
+		PdfReader reader;
+		try {
+			reader = new PdfReader(file.getBytes());
+			if (reader.getMetadata() == null) {
+			      System.out.println("No XML Metadata.");
+			      HashMap<String, String> mmap=new HashMap<String,String>();
+			      mmap.put("NOXML", "NOXML");
+			      return mmap;
+			    } else {
+			      //System.out.println("XML Metadata: " + new String(reader.getMetadata()));
+			      @SuppressWarnings("unchecked")
+			      HashMap<String, String> map=reader.getInfo();
+			      System.out.println(map.keySet());
+			      return map;
+			    }
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		HashMap<String, String> mmap=new HashMap<String,String>();
+	    mmap.put("NOXML", "NOXML");
+	    return mmap;
+
+		
+	}
+	
 }
