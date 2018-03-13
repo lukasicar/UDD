@@ -1,0 +1,69 @@
+<p>
+  users works!
+</p>
+<div>
+	<table border="1">
+		<th>Username</th><th>First name</th><th>Last name</th><th>Category</th><th>Type</th><th>Modify</th>
+		<tr *ngFor="let user of users">
+			<td align="center">{{user.username}}</td>
+			<td align="center">{{user.firstName}}</td>
+			<td align="center">{{user.lastName}}</td>
+			<td align="center"><div *ngIf="user.category!=null">{{user.category.name}}</div></td>
+			<td align="center">{{user.type}}</td>
+			<td align="center"><span class="glyphicon glyphicon-pencil" (click)="modify(user)"></span></td>
+		</tr>
+	</table>
+</div>
+<br/><br/>
+<div class="row padding-class">
+	<div class="container col-sm-4">
+		<form [formGroup]="usersForm" (ngSubmit)="add()">
+			<div class="form-group row">
+				<label class="col-sm-6 col-form-label">Username</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" formControlName="username" reqired>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-6 col-form-label">Password</label>
+				<div class="col-sm-6">
+					<input type="password" class="form-control" formControlName="password" reqired>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-6 col-form-label">First name</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" formControlName="firstName" reqired>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-6 col-form-label">Last name</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" formControlName="lastName" reqired>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-6 col-form-label">Category</label>
+				<div class="col-sm-6">
+					<select formControlName="category" [compareWith]="compareFn">
+						<option *ngFor="let b of categories" [ngValue]="b">{{b.name}}</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-6 col-form-label">Type</label>
+				<div class="col-sm-6">
+					<select formControlName="type" >
+						<option>administrator</option>
+						<option>pretplatnik</option>
+					</select>
+				</div>
+			</div>
+			<div align="left">
+				<button type="submit" class="btn btn-outline-dark">Dodaj/Izmjeni korisnika</button>
+			</div>
+		</form>
+	</div>
+</div>
+<br/>
+<a routerLink="/" routerLinkActive="active">Glavna</a>

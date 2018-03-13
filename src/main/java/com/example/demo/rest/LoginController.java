@@ -6,9 +6,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.LoginDTO;
+import com.example.demo.dto.ProfileDTO;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 
@@ -66,6 +70,53 @@ public class LoginController {
 		}
 		
 	}
-		
+	
+	
+	@PostMapping("/changePassword")
+	public String changePassword(@RequestBody LoginDTO dto) {
+		User u=userRepository.findByUsername(dto.getUsername());
+		u.setPassword(dto.getPassword());
+		userRepository.save(u);
+		return "ok";
+	}
+	
+	@PostMapping("/updateProfile")
+	public ResponseEntity<User> updateProfile(@RequestBody ProfileDTO dto,HttpServletRequest request) {
+		String username=request.getHeader("username");
+		User u = userRepository.findByUsername(username);
+		u.setUsername(dto.getUsername());
+		u.setFirstName(dto.getFirstName());
+		u.setLastName(dto.getLastName());
+		try {
+			userRepository.save(u);
+			return new ResponseEntity<User>(u, HttpStatus.OK);
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e.getMessage());
+			return new ResponseEntity<User>(u, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@PostMapping("/getUser")
+	public User getUser(@RequestBody String username) {
+		return userRepository.findByUsername(username);
+	}
+	
+	@PostMapping("/addUser")
+	public ResponseEntity<User> addUser(@RequestBody User user){
+			try {
+				userRepository.save(user);
+				return new ResponseEntity<User>(user, HttpStatus.OK);
+			} catch (Exception e) {
+				// TODO: handle exception
+				return new ResponseEntity<User>(user, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+	}
+	
+	@PreAuthorize("hasAuthority('administrator')")
+	@GetMapping("/getUsers")
+	public List<User> getUsers(){
+		return userRepository.findAll();
+	}
 
 }

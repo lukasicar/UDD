@@ -1,0 +1,31 @@
+<p>
+  categories works!
+</p>
+<br/>
+<div>
+	<table border="1">
+		<th>Ime kategorije</th><th>Izmjeni</th>
+		<tr *ngFor="let category of categories">
+			<td align="center">{{category.name}}</td>
+			<td align="center"><span class="glyphicon glyphicon-pencil" (click)="modify(category)"></span></td>
+		</tr>
+	</table>
+</div>
+<br/><br/>
+<div class="row padding-class">
+	<div class="container col-sm-4">
+		<form [formGroup]="categoryForm" (ngSubmit)="add()">
+			<div class="form-group row">
+				<label class="col-sm-6 col-form-label">Name</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" formControlName="name" reqired>
+				</div>
+			</div>
+			<div align="left">
+				<button type="submit" class="btn btn-outline-dark">Dodaj/Izmjeni kategoriju</button>
+			</div>
+		</form>
+	</div>
+</div>
+<br/>
+<a routerLink="/" routerLinkActive="active">Glavna</a>

@@ -1,0 +1,32 @@
+<p>
+  profile works!
+</p>
+<div class="row padding-class">
+	<div class="container col-sm-4">
+		<form [formGroup]="profileForm" (ngSubmit)="add()">
+			<div class="form-group row">
+				<label class="col-sm-6 col-form-label">Username</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" formControlName="username" reqired>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-6 col-form-label">First name</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" formControlName="firstName" reqired>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-6 col-form-label">Last name</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" formControlName="lastName" reqired>
+				</div>
+			</div>
+			<div align="left">
+				<button type="submit" class="btn btn-outline-dark">Update profile</button>
+			</div>
+		</form> 
+	</div>
+</div>
+<br/>
+<a routerLink="/" routerLinkActive="active">Glavna</a>

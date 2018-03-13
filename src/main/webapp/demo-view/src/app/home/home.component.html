@@ -61,7 +61,11 @@
 </div>
 <input type="file" name="upload" accept="application/pdf" (change)="uploadFile($event)"/>
 <br/><br/><br/>
-
+<a routerLink="/categories" routerLinkActive="active">Kategorije</a><br/>
+<a routerLink="/password" routerLinkActive="active">Promjeni sifru</a><br/>
+<a routerLink="/profile" routerLinkActive="active">Licni podaci</a><br/>
+<a routerLink="/users" routerLinkActive="active">Korisnici</a><br/>
+<a routerLink="/search" routerLinkActive="active">Search</a><br/>
 <br/><br/><br/><br/><br/><br/><br/><br/>
 <br/>
 <button id="button-1" class="button" (click)='this.logout()'>Log out</button>
