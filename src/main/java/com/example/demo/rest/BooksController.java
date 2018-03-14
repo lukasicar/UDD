@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.demo.elastic.Helper;
 import com.example.demo.model.Category;
 import com.example.demo.model.E_Book;
 import com.example.demo.model.Language;
@@ -38,6 +39,9 @@ public class BooksController {
 	
 	@Autowired
 	private LanguageRepository languageRepository;
+	
+	@Autowired
+	private Helper helper;
 
 	@PreAuthorize("hasAuthority('administrator')")
 	@GetMapping("/getCategories")
@@ -60,6 +64,12 @@ public class BooksController {
 	@PostMapping("/addBook")
 	public boolean addBook(@RequestBody E_Book e_book){
 		booksRepository.save(e_book);
+		try {
+			helper.saveAndIndex(e_book);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return true;
 	}
 	
@@ -68,15 +78,20 @@ public class BooksController {
 		PdfReader reader;
 		try {
 			reader = new PdfReader(file.getBytes());
+			
 			if (reader.getMetadata() == null) {
 			      System.out.println("No XML Metadata.");
 			      HashMap<String, String> mmap=new HashMap<String,String>();
 			      mmap.put("NOXML", "NOXML");
+			      
 			      return mmap;
 			    } else {
 			      //System.out.println("XML Metadata: " + new String(reader.getMetadata()));
 			      @SuppressWarnings("unchecked")
 			      HashMap<String, String> map=reader.getInfo();
+			      //System.out.println(System.getProperty("user.dir"));
+			      String filename=helper.saveUploadedFile(file);
+			      map.put("filename", filename);
 			      System.out.println(map.keySet());
 			      return map;
 			    }
@@ -84,7 +99,7 @@ public class BooksController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		
 		HashMap<String, String> mmap=new HashMap<String,String>();
 	    mmap.put("NOXML", "NOXML");
 	    return mmap;

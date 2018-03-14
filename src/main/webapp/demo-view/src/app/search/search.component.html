@@ -1,3 +1,20 @@
 <p>
   search works!
 </p>
+<div class="row padding-class">
+	<div class="container col-sm-4">
+		<form [formGroup]="searchForm1" (ngSubmit)="add()">
+			<div class="form-group row">
+				<label class="col-sm-6 col-form-label">Query</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" formControlName="value" reqired>
+				</div>
+			</div>
+			<div align="left">
+				<button type="submit" class="btn btn-outline-dark">Pretrazi</button>
+			</div>
+		</form>
+	</div>
+</div>
+<br/>
+<a routerLink="/" routerLinkActive="active">Glavna</a>

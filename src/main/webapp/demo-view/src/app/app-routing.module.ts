@@ -6,7 +6,7 @@ import { CategoriesComponent } from './categories/categories.component';
 import { PasswordComponent} from './password/password.component';
 import { ProfileComponent } from './profile/profile.component';
 import { UsersComponent } from './users/users.component';
-import { SearchService } from './search/search.service';
+import { SearchComponent } from './search/search.component';
 
 const routes: Routes = [
     { path: '', pathMatch: 'full', redirectTo: 'home'},

@@ -64,7 +64,8 @@ export class HomeComponent implements OnInit{
             publicationYear: new FormControl(book.publicationYear,[Validators.required]),
             //category: new FormControl(book.category),
             language: new FormControl(book.language),
-            id:new FormControl(book.id)
+            id:new FormControl(book.id),
+            filename:new FormControl(book.filename)
             });
     }
 
@@ -115,7 +116,8 @@ export class HomeComponent implements OnInit{
                         publicationYear: new FormControl('',[Validators.required]),
                         keywords : new FormControl(x['KeyWords']),
                         //category: new FormControl(''),
-                        language: new FormControl('')
+                        language: new FormControl(''),
+                        filename: new FormControl(x['filename'])
                 });
             });
         }
