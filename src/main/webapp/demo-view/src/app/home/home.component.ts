@@ -35,7 +35,8 @@ export class HomeComponent implements OnInit{
             author: new FormControl('',[Validators.required]),
             publicationYear: new FormControl('',[Validators.required]),
             //category: new FormControl(''),
-            language: new FormControl('')
+            language: new FormControl(''),
+            keywords : new FormControl('',[Validators.required])
             });
             this.title=localStorage.getItem('user');
             this.homeService.getCategories().subscribe(x=>{
@@ -65,7 +66,8 @@ export class HomeComponent implements OnInit{
             //category: new FormControl(book.category),
             language: new FormControl(book.language),
             id:new FormControl(book.id),
-            filename:new FormControl(book.filename)
+            filename:new FormControl(book.filename),
+            keywords : new FormControl(book.keywords)
             });
     }
 
@@ -92,7 +94,8 @@ export class HomeComponent implements OnInit{
                         author: new FormControl('',[Validators.required]),
                         publicationYear: new FormControl('',[Validators.required]),
                         //category: new FormControl(''),
-                        language: new FormControl('')
+                        language: new FormControl(''),
+                        keywords : new FormControl('',[Validators.required])
                         });
                     }));
     }
@@ -114,7 +117,7 @@ export class HomeComponent implements OnInit{
                         title: new FormControl(x['Title'],[Validators.required]),
                         author: new FormControl(x['Author'],[Validators.required]),
                         publicationYear: new FormControl('',[Validators.required]),
-                        keywords : new FormControl(x['KeyWords']),
+                        keywords : new FormControl(x['Keywords']),
                         //category: new FormControl(''),
                         language: new FormControl(''),
                         filename: new FormControl(x['filename'])

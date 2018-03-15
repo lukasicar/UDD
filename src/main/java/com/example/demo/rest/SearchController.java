@@ -125,7 +125,7 @@ public class SearchController {
 			ResourceBundle rb=ResourceBundle.getBundle("application");
 			DATA_DIR_PATH=rb.getString("dataDir");
 		}
-		
+		/*
 		@Autowired
 		private Indexer indexer;
 		
@@ -151,6 +151,6 @@ public class SearchController {
 		        file = new File(url.getPath());
 		    }   
 		    return file;
-		}
+		}*/
 	
 }

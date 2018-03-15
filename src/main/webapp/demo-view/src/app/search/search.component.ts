@@ -15,7 +15,9 @@ import { SearchService } from './search.service';
 export class SearchComponent implements OnInit {
 
     title = 'Demo';
-    searchForm1: FormGroup; 
+    searchForm1: FormGroup;
+    results=[];
+    searchForm2: FormGroup; 
     
     constructor(private router: Router,private searchService:SearchService) {
     }
@@ -27,25 +29,47 @@ export class SearchComponent implements OnInit {
             this.router.navigate(['/login']);
         else{
             this.searchForm1 = new FormGroup({
-                value: new FormControl('',[Validators.required])
+                value: new FormControl('',[Validators.required]),
+                field: new FormControl('',[Validators.required]),
+                type: new FormControl('',[Validators.required])
             });
+            this.searchForm2 = new FormGroup({
+                value1: new FormControl('',[Validators.required]),
+                field1: new FormControl('',[Validators.required]),
+                value2: new FormControl('',[Validators.required]),
+                field2: new FormControl('',[Validators.required]),
+                operation: new FormControl('',[Validators.required])
+            });    
             this.title=localStorage.getItem('user');
         }
     }
     
-    add(){
+    search1(){
         let credentials = this.searchForm1.value;
         if(this.searchForm1.valid==false){
             alert("Popunite polja");
             return;
         }
-        this.searchService.addUser(credentials)
+        this.searchService.search1(credentials)
             .subscribe(
                 x => {
-                    this.searchForm1 = new FormGroup({
-                    value: new FormControl('',[Validators.required])
-                    });
-                    alert(x);
+                    this.results=x;
+                },(err) => {
+                    if (err === 'Internal server error') { alert("Vec postoji korisnik sa tim username-om");}
+                });
+
+     }
+
+    search2(){
+        let credentials = this.searchForm2.value;
+        if(this.searchForm2.valid==false){
+            alert("Popunite polja");
+            return;
+        }
+        this.searchService.search2(credentials)
+            .subscribe(
+                x => {
+                    this.results=x;
                 },(err) => {
                     if (err === 'Internal server error') { alert("Vec postoji korisnik sa tim username-om");}
                 });

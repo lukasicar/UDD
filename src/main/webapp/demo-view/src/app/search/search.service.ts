@@ -14,15 +14,23 @@ export class SearchService {
     constructor(private http: Http) {
     }
 
-    addUser(query:any){
+    search1(query:any){
         var headers = new Headers();
         headers.append('Authorization', 'Bearer ' + localStorage.getItem('app-token'));
-        return this.http.post(this.apiUrl + "/search/queryParser",query,{headers:headers}).map(res=>res.json()).catch(e => {
+        return this.http.post(this.apiUrl + "/search/"+query.type,query,{headers:headers}).map(res=>res.json()).catch(e => {
             if (e.status === 500) {
                 return Observable.throw('Internal server error');
             }
         });
     }
    
-
+    search2(query:any){
+        var headers = new Headers();
+        headers.append('Authorization', 'Bearer ' + localStorage.getItem('app-token'));
+        return this.http.post(this.apiUrl + "/search/boolean",query,{headers:headers}).map(res=>res.json()).catch(e => {
+            if (e.status === 500) {
+                return Observable.throw('Internal server error');
+            }
+        });
+    }
 }
