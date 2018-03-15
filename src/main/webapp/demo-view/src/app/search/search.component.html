@@ -92,15 +92,8 @@
 <br/>
 <div *ngFor="let result of results">
 	<p>Title  {{result.title}}</p><br/>
-	<p>Author  {{result.author}}</p><br/>{{result.location}}
-	<p>Keywords  {{result.keywords}}</p><a href='{{result.location}}'>Download</a><br/>
-	<button (click)="download(result.location)">Download</button>
-	
-	<form action="localhost:8080/books/download" method="post">
-		<input type="text" name="filename" value="{{result.location}}" hidden><br>
-	  	<button type="submit" formmethod="post">Submit using POST</button>
-	</form> 
-	
+	<p>Author  {{result.author}}</p><br/>
+	<p>Keywords  {{result.keywords}}</p><a href='{{result.location}}' download>Download</a><br/>
 	<p>-------------------------------</p><br/>
 </div>
 <br/>

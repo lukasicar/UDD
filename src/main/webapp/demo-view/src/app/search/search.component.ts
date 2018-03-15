@@ -17,7 +17,8 @@ export class SearchComponent implements OnInit {
     title = 'Demo';
     searchForm1: FormGroup;
     results=[];
-    searchForm2: FormGroup; 
+    searchForm2: FormGroup;
+    private apiUrl = `${environment.BACKEND_URL}`; 
     
     constructor(private router: Router,private searchService:SearchService) {
     }
@@ -53,6 +54,9 @@ export class SearchComponent implements OnInit {
         this.searchService.search1(credentials)
             .subscribe(
                 x => {
+                    for(let y in x){
+                        x[y].location=this.apiUrl+x[y].location.substring(x[y].location.lastIndexOf("\\"));
+                    }
                     this.results=x;
                 },(err) => {
                     if (err === 'Internal server error') { alert("Vec postoji korisnik sa tim username-om");}
@@ -69,6 +73,9 @@ export class SearchComponent implements OnInit {
         this.searchService.search2(credentials)
             .subscribe(
                 x => {
+                    for(let y in x){
+                        x[y].location=this.apiUrl+x[y].location.substring(x[y].location.lastIndexOf("\\"));
+                    }
                     this.results=x;
                 },(err) => {
                     if (err === 'Internal server error') { alert("Vec postoji korisnik sa tim username-om");}
@@ -76,7 +83,5 @@ export class SearchComponent implements OnInit {
 
      }
 
-    download(filename:string){
-        this.searchService.download(filename).subscribe(x=>alert(x));
-    }
+    
 }

@@ -32,7 +32,9 @@ public class Helper {
     	String retVal = null;
         if (! file.isEmpty()) {
             byte[] bytes = file.getBytes();
-            Path path = Paths.get(getResourceFilePath(DATA_DIR_PATH).getAbsolutePath() + File.separator + file.getOriginalFilename());
+            //Path path = Paths.get(getResourceFilePath(DATA_DIR_PATH).getAbsolutePath() + File.separator + file.getOriginalFilename());
+            Path path = Paths.get("./src/main/resources/static" + File.separator + file.getOriginalFilename());
+            
             System.out.println(path);
             Files.write(path, bytes);
             retVal = path.toString();

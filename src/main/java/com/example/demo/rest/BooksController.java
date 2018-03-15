@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.ResultSetSupportingSqlParameter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -114,46 +115,4 @@ public class BooksController {
 
 		
 	}
-	
-	
-	@PostMapping("/download")
-	public ResponseEntity<InputStreamResource> downloadFile1(
-            @RequestBody String fileName) throws IOException {
- 
-        MediaType mediaType = MediaType.parseMediaType("application/pdf");
-        System.out.println("fileName: " + fileName);
-        System.out.println("mediaType: " + mediaType);
- 
-        File file = new File(fileName);
-        InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
- 
-        return ResponseEntity.ok()
-                // Content-Disposition
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + file.getName())
-                // Content-Type
-                .contentType(mediaType)
-                // Contet-Length
-                .contentLength(file.length()) //
-                .body(resource);
-    }
-	
-	@GetMapping("/download1")
-	public ResponseEntity<InputStreamResource> downloadFile2() throws IOException {
- 
-        MediaType mediaType = MediaType.parseMediaType("application/pdf");
-        System.out.println("fileName: " );
-        System.out.println("mediaType: " + mediaType);
- 
-        File file = new File("C:\\Users\\Lenovo\\eclipse-workspace\\udd\\demo\\target\\classes\\files\\eBookRepository.pdf");
-        InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
- 
-        return ResponseEntity.ok()
-                // Content-Disposition
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + file.getName())
-                // Content-Type
-                .contentType(mediaType)
-                // Contet-Length
-                .contentLength(file.length()) //
-                .body(resource);
-    }
 }
