@@ -36,6 +36,8 @@ export class LoginComponent  {
                     console.log(this.authenticate);
                     localStorage.setItem('app-token',this.authenticate.token);
                     localStorage.setItem('user',this.authenticate.user);
+                    localStorage.setItem('type',this.authenticate.type);
+                    localStorage.setItem('category',this.authenticate.category);
                     this.router.navigate(['/home']);
                 },(err) => {
                     if (err === 'Unauthorized') { alert("Pogresno korisnicko ime ili lozinka");}

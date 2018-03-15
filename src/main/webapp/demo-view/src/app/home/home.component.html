@@ -6,17 +6,21 @@
 <br/><br/>
 
 <table border="1">
-	<tr><th>Title</th><th>Author</th><th>Publication Year</th><th>Jezik</th><th>Izmjeni</th></tr>
+	<tr><th>Title</th><th>Author</th><th>Publication Year</th><th>Jezik</th><th>Izmjeni</th><th *ngIf="type!='administrator'">Download</th></tr>
   	<tr *ngFor="let book of books">
   		<td align="center">{{book.title}}</td>
   		<td align="center">{{book.author}}</td>
   		<td align="center">{{book.publicationYear}}</td>
   		<td align="center">{{book.language.name}}</td>
   		<td align="center"><span class="glyphicon glyphicon-pencil" (click)="modify(book)"></span></td>
+  		<td align="center" *ngIf="((cat==null||cat==selectedValue.name))">
+  			<span class="glyphicon glyphicon-download" *ngIf="type=='subscriber'"></span>
+  			<p *ngIf="type!='administrator'&&type!='subscriber'"></p>
+  		</td>
   	</tr>
 </table> 
 <br/><br/>
-<div class="row padding-class">
+<div class="row padding-class" *ngIf="type=='administrator'">
 	<div class="container col-sm-4">
 		<form [formGroup]="bookForm" (ngSubmit)="add()">
 			<div class="form-group row">
@@ -63,15 +67,17 @@
 				<button type="submit" class="btn btn-outline-dark">Dodaj/Izmjeni knjigu</button>
 			</div>
 		</form>
+		<input type="file" name="upload" accept="application/pdf" (change)="uploadFile($event)"/>
 	</div>
 </div>
-<input type="file" name="upload" accept="application/pdf" (change)="uploadFile($event)"/>
+
 <br/><br/><br/>
-<a routerLink="/categories" routerLinkActive="active">Kategorije</a><br/>
-<a routerLink="/password" routerLinkActive="active">Promjeni sifru</a><br/>
-<a routerLink="/profile" routerLinkActive="active">Licni podaci</a><br/>
-<a routerLink="/users" routerLinkActive="active">Korisnici</a><br/>
+<a routerLink="/categories" routerLinkActive="active" *ngIf="type=='administrator'">Kategorije</a><br/>
+<a routerLink="/password" routerLinkActive="active" *ngIf="type=='administrator'||type=='subscriber'">Promjeni sifru</a><br/>
+<a routerLink="/profile" routerLinkActive="active" *ngIf="type=='administrator'||type=='subscriber'">Licni podaci</a><br/>
+<a routerLink="/users" routerLinkActive="active" *ngIf="type=='administrator'">Korisnici</a><br/>
 <a routerLink="/search" routerLinkActive="active">Search</a><br/>
 <br/><br/><br/><br/><br/><br/><br/><br/>
 <br/>
-<button id="button-1" class="button" (click)='this.logout()'>Log out</button>
+<button id="button-1" class="button" (click)='this.logout()' *ngIf="type=='administrator'||type=='subscriber'">Log out</button>
+<a routerLink="/login" routerLinkActive="active" *ngIf="type!='administrator'&&type!='subscriber'">Log in</a><br/>

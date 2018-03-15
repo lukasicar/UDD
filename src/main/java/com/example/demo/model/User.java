@@ -8,7 +8,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.ManyToAny;
 
 
 @Entity
@@ -28,9 +31,8 @@ public class User implements Serializable{
 	private String password;
 	private String firstName;
 	private String lastName;
+	@ManyToOne
 	private Category category;
-	@OneToMany
-	private List<E_Book> books;
 	private String type;
 	
 	
@@ -58,12 +60,12 @@ public class User implements Serializable{
 	public void setCategory(Category category) {
 		this.category = category;
 	}
-	public List<E_Book> getBooks() {
+	/*public List<E_Book> getBooks() {
 		return books;
 	}
 	public void setBooks(List<E_Book> books) {
 		this.books = books;
-	}
+	}*/
 	public String getType() {
 		return type;
 	}

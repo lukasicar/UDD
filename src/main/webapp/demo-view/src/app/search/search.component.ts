@@ -25,9 +25,9 @@ export class SearchComponent implements OnInit {
     
     ngOnInit() {
         var x=localStorage.getItem('app-token');
-        if(x==null)
-            this.router.navigate(['/login']);
-        else{
+        //if(x==null)
+        //    this.router.navigate(['/login']);
+        //else{
             this.searchForm1 = new FormGroup({
                 value: new FormControl('',[Validators.required]),
                 field: new FormControl('',[Validators.required]),
@@ -41,7 +41,7 @@ export class SearchComponent implements OnInit {
                 operation: new FormControl('',[Validators.required])
             });    
             this.title=localStorage.getItem('user');
-        }
+        //}
     }
     
     search1(){
@@ -75,5 +75,8 @@ export class SearchComponent implements OnInit {
                 });
 
      }
-        
+
+    download(filename:string){
+        this.searchService.download(filename).subscribe(x=>alert(x));
+    }
 }

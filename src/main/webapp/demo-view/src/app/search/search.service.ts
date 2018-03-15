@@ -16,6 +16,7 @@ export class SearchService {
 
     search1(query:any){
         var headers = new Headers();
+        if(localStorage.getItem('user')!=null)
         headers.append('Authorization', 'Bearer ' + localStorage.getItem('app-token'));
         return this.http.post(this.apiUrl + "/search/"+query.type,query,{headers:headers}).map(res=>res.json()).catch(e => {
             if (e.status === 500) {
@@ -26,8 +27,20 @@ export class SearchService {
    
     search2(query:any){
         var headers = new Headers();
+        if(localStorage.getItem('user')!=null)
         headers.append('Authorization', 'Bearer ' + localStorage.getItem('app-token'));
         return this.http.post(this.apiUrl + "/search/boolean",query,{headers:headers}).map(res=>res.json()).catch(e => {
+            if (e.status === 500) {
+                return Observable.throw('Internal server error');
+            }
+        });
+    }
+    
+    download(filename:string){
+        var headers = new Headers();
+        if(localStorage.getItem('user')!=null)
+        headers.append('Authorization', 'Bearer ' + localStorage.getItem('app-token'));
+        return this.http.post(this.apiUrl + "/books/download",filename,{headers:headers}).map(res=>res.json()).catch(e => {
             if (e.status === 500) {
                 return Observable.throw('Internal server error');
             }

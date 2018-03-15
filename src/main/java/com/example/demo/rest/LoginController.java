@@ -61,7 +61,8 @@ public class LoginController {
 			//System.out.println(token);
 			tokenMap.put("token", token);
 			tokenMap.put("user", user.getUsername());
-			//tokenMap.put("role", user.getRole());
+			tokenMap.put("category", user.getCategory()!=null? user.getCategory().getName() : null);
+			tokenMap.put("type", user.getType());
 			
 			return new ResponseEntity<Map<String, Object>>(tokenMap, HttpStatus.OK);
 		} else {

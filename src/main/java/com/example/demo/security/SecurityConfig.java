@@ -38,7 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public AuthenticationManager authenticationManager() throws Exception {
 		return super.authenticationManager();
 	}
-
+	
 	/**
 	 * This method returns instance of AuthenticationTokenFilter
 	 *
@@ -57,7 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 		web.ignoring()
 				.antMatchers("/", "/index.html", "/app/**", "/registration", "/login","/registration/activateProcess","/registration/*", 
-						"/favicon.ico", "/confirm_registration*", "/category","/registration/firm/*");
+						"/favicon.ico", "/confirm_registration*", "/category","/registration/firm/*","/books/*","/search/*");
 	}
 	
 	/*@Bean

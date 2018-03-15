@@ -45,6 +45,7 @@ public class Helper {
             indexUnit.setTitle(e_book.getTitle());
             indexUnit.setKeywords(e_book.getKeywords());
             indexUnit.setAuthor(e_book.getAuthor());
+            indexUnit.setFilename(e_book.getFilename());
             indexer.add(indexUnit);
     }
 	

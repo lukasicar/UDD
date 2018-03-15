@@ -19,7 +19,9 @@ export class HomeComponent implements OnInit{
     selectedValue:any;
     books=[];
     bookForm: FormGroup;
-    languages=[];    
+    languages=[];
+    type:string;
+    cat:string;    
 
     constructor(private app: AppService, private router: Router, private homeService: HomeService) {
     }
@@ -27,16 +29,16 @@ export class HomeComponent implements OnInit{
     
     ngOnInit() {
         var x=localStorage.getItem('app-token');
-        if(x==null)
-            this.router.navigate(['/login']);
-        else{
+        //if(x==null)
+            //this.router.navigate(['/login']);
+        //else{
             this.bookForm = new FormGroup({
-            title: new FormControl('',[Validators.required]),
-            author: new FormControl('',[Validators.required]),
-            publicationYear: new FormControl('',[Validators.required]),
-            //category: new FormControl(''),
-            language: new FormControl(''),
-            keywords : new FormControl('',[Validators.required])
+                title: new FormControl('',[Validators.required]),
+                author: new FormControl('',[Validators.required]),
+                publicationYear: new FormControl('',[Validators.required]),
+                //category: new FormControl(''),
+                language: new FormControl(''),
+                keywords : new FormControl('',[Validators.required])
             });
             this.title=localStorage.getItem('user');
             this.homeService.getCategories().subscribe(x=>{
@@ -45,12 +47,15 @@ export class HomeComponent implements OnInit{
                 this.homeService.getBooksByCategory(this.selectedValue).subscribe(x=>this.books=x);
             });
             this.homeService.getLanguages().subscribe(x=>this.languages=x);
-        }
+            this.cat=localStorage.getItem('category');
+            this.type=localStorage.getItem('type');
+        //}
     }
     
     logout(){
         localStorage.removeItem('app-token');
         localStorage.removeItem('user');
+        localStorage.clear();
         this.router.navigate(['/login']);
     }
 
@@ -111,6 +116,15 @@ export class HomeComponent implements OnInit{
             this.homeService.sendFile(file).subscribe(x=>{
                 if(x['NOXML']!=null){
                     alert("Nema meta podataka");
+                    this.bookForm = new FormGroup({
+                        title: new FormControl('',[Validators.required]),
+                        author: new FormControl('',[Validators.required]),
+                        publicationYear: new FormControl('',[Validators.required]),
+                        keywords : new FormControl(''),
+                        //category: new FormControl(''),
+                        language: new FormControl(''),
+                        filename: new FormControl(x['filename'])
+                        });
                     return;
                 }
                 this.bookForm = new FormGroup({

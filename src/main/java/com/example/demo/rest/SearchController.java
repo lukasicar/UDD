@@ -22,12 +22,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.elastic.AdvancedQuery;
+import com.example.demo.elastic.CyrilicToLatinFilter;
+import com.example.demo.elastic.CyrillicLatinConverter;
 import com.example.demo.elastic.Indexer;
 import com.example.demo.elastic.QueryBuilder;
 import com.example.demo.elastic.RequiredHighlight;
 import com.example.demo.elastic.ResultData;
 import com.example.demo.elastic.ResultRetriever;
 import com.example.demo.elastic.SearchType;
+import com.example.demo.elastic.SerbianAnalyzer;
 import com.example.demo.elastic.SimpleQuery;
 
 
@@ -39,10 +42,12 @@ public class SearchController {
 
 		@Autowired
 		private ResultRetriever resultRetriever;
+		
 	
 		@PostMapping(value="/term", consumes="application/json")
-		public ResponseEntity<List<ResultData>> searchTermQuery(@RequestBody SimpleQuery simpleQuery) throws Exception {		
-			org.elasticsearch.index.query.QueryBuilder query= QueryBuilder.buildQuery(SearchType.regular, simpleQuery.getField(), simpleQuery.getValue());
+		public ResponseEntity<List<ResultData>> searchTermQuery(@RequestBody SimpleQuery simpleQuery) throws Exception {
+			org.elasticsearch.index.query.QueryBuilder query= QueryBuilder.buildQuery(
+					SearchType.regular, simpleQuery.getField(), obradi(simpleQuery.getValue()));
 			List<RequiredHighlight> rh = new ArrayList<RequiredHighlight>();
 			rh.add(new RequiredHighlight(simpleQuery.getField(), simpleQuery.getValue()));
 			List<ResultData> results = resultRetriever.getResults(query, rh);			
@@ -51,7 +56,8 @@ public class SearchController {
 		
 		@PostMapping(value="/fuzzy", consumes="application/json")
 		public ResponseEntity<List<ResultData>> searchFuzzy(@RequestBody SimpleQuery simpleQuery) throws Exception {
-			org.elasticsearch.index.query.QueryBuilder query= QueryBuilder.buildQuery(SearchType.fuzzy, simpleQuery.getField(), simpleQuery.getValue());
+			org.elasticsearch.index.query.QueryBuilder query= QueryBuilder.buildQuery(
+					SearchType.fuzzy, simpleQuery.getField(), simpleQuery.getValue());
 			List<RequiredHighlight> rh = new ArrayList<RequiredHighlight>();
 			rh.add(new RequiredHighlight(simpleQuery.getField(), simpleQuery.getValue()));
 			List<ResultData> results = resultRetriever.getResults(query, rh);			
@@ -60,7 +66,8 @@ public class SearchController {
 		
 		@PostMapping(value="/prefix", consumes="application/json")
 		public ResponseEntity<List<ResultData>> searchPrefix(@RequestBody SimpleQuery simpleQuery) throws Exception {
-			org.elasticsearch.index.query.QueryBuilder query= QueryBuilder.buildQuery(SearchType.prefix, simpleQuery.getField(), simpleQuery.getValue());
+			org.elasticsearch.index.query.QueryBuilder query= QueryBuilder.buildQuery(
+					SearchType.prefix, simpleQuery.getField(), simpleQuery.getValue());
 			List<RequiredHighlight> rh = new ArrayList<RequiredHighlight>();
 			rh.add(new RequiredHighlight(simpleQuery.getField(), simpleQuery.getValue()));
 			List<ResultData> results = resultRetriever.getResults(query, rh);			
@@ -69,7 +76,8 @@ public class SearchController {
 		
 		@PostMapping(value="/range", consumes="application/json")
 		public ResponseEntity<List<ResultData>> searchRange(@RequestBody SimpleQuery simpleQuery) throws Exception {
-			org.elasticsearch.index.query.QueryBuilder query= QueryBuilder.buildQuery(SearchType.range, simpleQuery.getField(), simpleQuery.getValue());
+			org.elasticsearch.index.query.QueryBuilder query= QueryBuilder.buildQuery(
+					SearchType.range, simpleQuery.getField(), simpleQuery.getValue());
 			List<RequiredHighlight> rh = new ArrayList<RequiredHighlight>();
 			rh.add(new RequiredHighlight(simpleQuery.getField(), simpleQuery.getValue()));
 			List<ResultData> results = resultRetriever.getResults(query, rh);			
@@ -78,7 +86,8 @@ public class SearchController {
 		
 		@PostMapping(value="/phrase", consumes="application/json")
 		public ResponseEntity<List<ResultData>> searchPhrase(@RequestBody SimpleQuery simpleQuery) throws Exception {
-			org.elasticsearch.index.query.QueryBuilder query= QueryBuilder.buildQuery(SearchType.phrase, simpleQuery.getField(), simpleQuery.getValue());
+			org.elasticsearch.index.query.QueryBuilder query= QueryBuilder.buildQuery(
+					SearchType.phrase, simpleQuery.getField(), simpleQuery.getValue());
 			List<RequiredHighlight> rh = new ArrayList<RequiredHighlight>();
 			rh.add(new RequiredHighlight(simpleQuery.getField(), simpleQuery.getValue()));
 			List<ResultData> results = resultRetriever.getResults(query, rh);			
@@ -118,14 +127,14 @@ public class SearchController {
 			return new ResponseEntity<List<ResultData>>(results, HttpStatus.OK);
 		}
 		
-		
+		/*
 		private static String DATA_DIR_PATH;
 		
 		static {
 			ResourceBundle rb=ResourceBundle.getBundle("application");
 			DATA_DIR_PATH=rb.getString("dataDir");
 		}
-		/*
+		
 		@Autowired
 		private Indexer indexer;
 		
@@ -153,4 +162,9 @@ public class SearchController {
 		    return file;
 		}*/
 	
+		private String obradi(String s) {
+			String x=s.toLowerCase();
+			x=CyrillicLatinConverter.cir2lat(x);
+			return x;
+		}
 }

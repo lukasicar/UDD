@@ -14,19 +14,22 @@ export class HomeService {
 
     getCategories(){
         var headers = new Headers();
-        headers.append('Authorization', 'Bearer ' + localStorage.getItem('app-token'));
+        if(localStorage.getItem('user')!=null)
+            headers.append('Authorization', 'Bearer ' + localStorage.getItem('app-token'));
         return this.http.get(this.apiUrl + "/books/getCategories",{headers: headers}).map(res=>res.json());
     }
     
     getBooksByCategory(category:any){
         var headers = new Headers();
-        headers.append('Authorization', 'Bearer ' + localStorage.getItem('app-token'));
+        if(localStorage.getItem('user')!=null)
+            headers.append('Authorization', 'Bearer ' + localStorage.getItem('app-token'));
         return this.http.post(this.apiUrl + "/books/getBooksByCategory",category,{headers: headers}).map(res=>res.json());
     }
     
     getLanguages(){
         var headers = new Headers();
-        headers.append('Authorization', 'Bearer ' + localStorage.getItem('app-token'));
+        if(localStorage.getItem('user')!=null)
+            headers.append('Authorization', 'Bearer ' + localStorage.getItem('app-token'));
         return this.http.get(this.apiUrl + "/books/getLanguages",{headers:headers}).map(res=>res.json());
     }
 

@@ -1,10 +1,17 @@
 package com.example.demo.rest;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.ResultSetSupportingSqlParameter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,13 +50,13 @@ public class BooksController {
 	@Autowired
 	private Helper helper;
 
-	@PreAuthorize("hasAuthority('administrator')")
+	//@PreAuthorize("hasAuthority('administrator')")
 	@GetMapping("/getCategories")
 	public List<Category> getCategories(){
 		return categoryRepository.findAll();
 	}
 	
-	@PreAuthorize("hasAuthority('administrator')")
+	//@PreAuthorize("hasAuthority('administrator')")
 	@PostMapping("/getBooksByCategory")
 	public List<E_Book> getBooksByCategory(@RequestBody Category category){
 		//return booksRepository.findByCategory_Id(category.getId());
@@ -83,7 +90,8 @@ public class BooksController {
 			      System.out.println("No XML Metadata.");
 			      HashMap<String, String> mmap=new HashMap<String,String>();
 			      mmap.put("NOXML", "NOXML");
-			      
+			      String filename=helper.saveUploadedFile(file);
+			      mmap.put("filename", filename);
 			      return mmap;
 			    } else {
 			      //System.out.println("XML Metadata: " + new String(reader.getMetadata()));
@@ -107,4 +115,45 @@ public class BooksController {
 		
 	}
 	
+	
+	@PostMapping("/download")
+	public ResponseEntity<InputStreamResource> downloadFile1(
+            @RequestBody String fileName) throws IOException {
+ 
+        MediaType mediaType = MediaType.parseMediaType("application/pdf");
+        System.out.println("fileName: " + fileName);
+        System.out.println("mediaType: " + mediaType);
+ 
+        File file = new File(fileName);
+        InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+ 
+        return ResponseEntity.ok()
+                // Content-Disposition
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + file.getName())
+                // Content-Type
+                .contentType(mediaType)
+                // Contet-Length
+                .contentLength(file.length()) //
+                .body(resource);
+    }
+	
+	@GetMapping("/download1")
+	public ResponseEntity<InputStreamResource> downloadFile2() throws IOException {
+ 
+        MediaType mediaType = MediaType.parseMediaType("application/pdf");
+        System.out.println("fileName: " );
+        System.out.println("mediaType: " + mediaType);
+ 
+        File file = new File("C:\\Users\\Lenovo\\eclipse-workspace\\udd\\demo\\target\\classes\\files\\eBookRepository.pdf");
+        InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+ 
+        return ResponseEntity.ok()
+                // Content-Disposition
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + file.getName())
+                // Content-Type
+                .contentType(mediaType)
+                // Contet-Length
+                .contentLength(file.length()) //
+                .body(resource);
+    }
 }
