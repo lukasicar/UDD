@@ -14,7 +14,7 @@ INSERT INTO LANGUAGE(ID,NAME) VALUES(4,'Njemacki');
 INSERT INTO LANGUAGE(ID,NAME) VALUES(5,'Spanski');
 
 insert into USER(ID,FIRST_NAME,LAST_NAME,USERNAME,PASSWORD,TYPE) VALUES(1,'Aleksandra','Kantar','saska','saska','administrator');
-insert into USER(ID,FIRST_NAME,LAST_NAME,USERNAME,PASSWORD,TYPE) VALUES(2,'Luka','Sicar','luka','luka','subscriber');
+insert into USER(ID,FIRST_NAME,LAST_NAME,USERNAME,PASSWORD,TYPE,Category_id) VALUES(2,'Luka','Sicar','luka','luka','subscriber',1);
 
 --insert into e_book(id,title,author,publication_year,language_id,category_id) values(1,'Alisa u zemlji cuda','Luis Carrol',1994,1,5);
 --insert into e_book(id,title,author,publication_year,language_id,category_id) values(2,'Jezeva kucica','Branko Copic',1994,1,5);

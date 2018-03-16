@@ -2,6 +2,7 @@ package com.example.demo.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,6 +24,7 @@ public class E_Book implements Serializable{
 	private String author;
 	private String keywords;
 	private int publicationYear;
+	@Column(nullable = false,unique = true) 
 	private String filename;
 	private String MIME;
 	@ManyToOne

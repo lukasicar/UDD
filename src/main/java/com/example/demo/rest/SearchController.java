@@ -1,13 +1,7 @@
 package com.example.demo.rest;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -15,22 +9,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.elastic.AdvancedQuery;
-import com.example.demo.elastic.CyrilicToLatinFilter;
 import com.example.demo.elastic.CyrillicLatinConverter;
-import com.example.demo.elastic.Indexer;
 import com.example.demo.elastic.QueryBuilder;
 import com.example.demo.elastic.RequiredHighlight;
 import com.example.demo.elastic.ResultData;
 import com.example.demo.elastic.ResultRetriever;
 import com.example.demo.elastic.SearchType;
-import com.example.demo.elastic.SerbianAnalyzer;
 import com.example.demo.elastic.SimpleQuery;
 
 
@@ -57,7 +47,7 @@ public class SearchController {
 		@PostMapping(value="/fuzzy", consumes="application/json")
 		public ResponseEntity<List<ResultData>> searchFuzzy(@RequestBody SimpleQuery simpleQuery) throws Exception {
 			org.elasticsearch.index.query.QueryBuilder query= QueryBuilder.buildQuery(
-					SearchType.fuzzy, simpleQuery.getField(), simpleQuery.getValue());
+					SearchType.fuzzy, simpleQuery.getField(), obradi(simpleQuery.getValue()));
 			List<RequiredHighlight> rh = new ArrayList<RequiredHighlight>();
 			rh.add(new RequiredHighlight(simpleQuery.getField(), simpleQuery.getValue()));
 			List<ResultData> results = resultRetriever.getResults(query, rh);			
@@ -87,7 +77,7 @@ public class SearchController {
 		@PostMapping(value="/phrase", consumes="application/json")
 		public ResponseEntity<List<ResultData>> searchPhrase(@RequestBody SimpleQuery simpleQuery) throws Exception {
 			org.elasticsearch.index.query.QueryBuilder query= QueryBuilder.buildQuery(
-					SearchType.phrase, simpleQuery.getField(), simpleQuery.getValue());
+					SearchType.phrase, simpleQuery.getField(), obradi(simpleQuery.getValue()));
 			List<RequiredHighlight> rh = new ArrayList<RequiredHighlight>();
 			rh.add(new RequiredHighlight(simpleQuery.getField(), simpleQuery.getValue()));
 			List<ResultData> results = resultRetriever.getResults(query, rh);			
@@ -96,8 +86,10 @@ public class SearchController {
 		
 		@PostMapping(value="/boolean", consumes="application/json")
 		public ResponseEntity<List<ResultData>> searchBoolean(@RequestBody AdvancedQuery advancedQuery) throws Exception {
-			org.elasticsearch.index.query.QueryBuilder query1 = QueryBuilder.buildQuery(SearchType.regular, advancedQuery.getField1(), advancedQuery.getValue1());
-			org.elasticsearch.index.query.QueryBuilder query2 = QueryBuilder.buildQuery(SearchType.regular, advancedQuery.getField2(), advancedQuery.getValue2());
+			org.elasticsearch.index.query.QueryBuilder query1 = QueryBuilder.buildQuery(
+					SearchType.regular, advancedQuery.getField1(), obradi(advancedQuery.getValue1()));
+			org.elasticsearch.index.query.QueryBuilder query2 = QueryBuilder.buildQuery(
+					SearchType.regular, advancedQuery.getField2(), obradi(advancedQuery.getValue2()));
 			
 			BoolQueryBuilder builder = QueryBuilders.boolQuery();
 			if(advancedQuery.getOperation().equalsIgnoreCase("AND")){
@@ -112,8 +104,8 @@ public class SearchController {
 			}
 			
 			List<RequiredHighlight> rh = new ArrayList<RequiredHighlight>();
-			rh.add(new RequiredHighlight(advancedQuery.getField1(), advancedQuery.getValue1()));
-			rh.add(new RequiredHighlight(advancedQuery.getField2(), advancedQuery.getValue2()));
+			rh.add(new RequiredHighlight(advancedQuery.getField1(), obradi(advancedQuery.getValue1())));
+			rh.add(new RequiredHighlight(advancedQuery.getField2(), obradi(advancedQuery.getValue2())));
 			List<ResultData> results = resultRetriever.getResults(builder, rh);			
 			return new ResponseEntity<List<ResultData>>(results, HttpStatus.OK);
 		}

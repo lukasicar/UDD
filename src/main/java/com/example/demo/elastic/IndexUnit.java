@@ -26,6 +26,9 @@ public class IndexUnit {
 	@Field(type = FieldType.String, index = FieldIndex.analyzed, store = true)
 	private String author;
 
+	@Field(type = FieldType.String, index = FieldIndex.analyzed, store = true)
+	private String language;
+	
 	
 	@Id
 	@Field(type = FieldType.String, index = FieldIndex.not_analyzed, store = true)
@@ -73,5 +76,11 @@ public class IndexUnit {
 	}
 	public void setAuthor(String author) {
 		this.author = author;
+	}
+	public String getLanguage() {
+		return language;
+	}
+	public void setLanguage(String language) {
+		this.language = language;
 	}
 }

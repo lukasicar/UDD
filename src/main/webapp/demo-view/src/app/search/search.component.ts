@@ -19,6 +19,8 @@ export class SearchComponent implements OnInit {
     results=[];
     searchForm2: FormGroup;
     private apiUrl = `${environment.BACKEND_URL}`; 
+    type:string;
+    cat:string; 
     
     constructor(private router: Router,private searchService:SearchService) {
     }
@@ -42,6 +44,8 @@ export class SearchComponent implements OnInit {
                 operation: new FormControl('',[Validators.required])
             });    
             this.title=localStorage.getItem('user');
+            this.cat=localStorage.getItem('category');
+            this.type=localStorage.getItem('type');
         //}
     }
     
@@ -83,5 +87,14 @@ export class SearchComponent implements OnInit {
 
      }
 
+    check(result:any){
+        if(this.type=='administrator'){
+            return true;
+        }else if(this.type=='subscriber'){
+            return true;
+        }else{
+            return false;
+        }
+    }
     
 }

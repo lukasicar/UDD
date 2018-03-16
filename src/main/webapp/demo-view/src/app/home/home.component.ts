@@ -38,13 +38,19 @@ export class HomeComponent implements OnInit{
                 publicationYear: new FormControl('',[Validators.required]),
                 //category: new FormControl(''),
                 language: new FormControl(''),
-                keywords : new FormControl('',[Validators.required])
+                keywords : new FormControl('',[Validators.required]),
+                filename:new FormControl('')
             });
             this.title=localStorage.getItem('user');
             this.homeService.getCategories().subscribe(x=>{
                 this.categories=x;
                 this.selectedValue=x[0];
-                this.homeService.getBooksByCategory(this.selectedValue).subscribe(x=>this.books=x);
+                this.homeService.getBooksByCategory(this.selectedValue).subscribe(x=>{
+                    for(let y in x){
+                        x[y].link=this.apiUrl+x[y].filename.substring(x[y].filename.lastIndexOf("\\"));
+                    }
+                    this.books=x;
+                    });
             });
             this.homeService.getLanguages().subscribe(x=>this.languages=x);
             this.cat=localStorage.getItem('category');
@@ -76,9 +82,6 @@ export class HomeComponent implements OnInit{
             });
     }
 
-    remove(){
-        alert("remove");
-    }
 
     add(){
         let credentials = this.bookForm.value;
@@ -90,19 +93,30 @@ export class HomeComponent implements OnInit{
             alert("Odaberite jezilk");
             return;
         }
+        if(credentials.filename==""){
+            alert("Odaberite pdf fajl");
+            return;
+        }
         credentials.category=this.selectedValue;
         this.homeService.addBook(credentials).subscribe(
-            x=>this.homeService.getBooksByCategory(this.selectedValue).subscribe(
-                x=>{this.books=x;
-                    this.bookForm = new FormGroup({
-                        title: new FormControl('',[Validators.required]),
-                        author: new FormControl('',[Validators.required]),
-                        publicationYear: new FormControl('',[Validators.required]),
-                        //category: new FormControl(''),
-                        language: new FormControl(''),
-                        keywords : new FormControl('',[Validators.required])
-                        });
-                    }));
+            x=>{
+                if(x==false){
+                    alert("Pdf vec postoji, duplikat");
+                    return;
+                }
+                this.homeService.getBooksByCategory(this.selectedValue).subscribe(
+                    x=>{this.books=x;
+                        this.bookForm = new FormGroup({
+                            title: new FormControl('',[Validators.required]),
+                            author: new FormControl('',[Validators.required]),
+                            publicationYear: new FormControl('',[Validators.required]),
+                            //category: new FormControl(''),
+                            language: new FormControl(''),
+                            keywords : new FormControl('',[Validators.required]),
+                            filename:new FormControl(credentials.filename)
+                            });
+                        })
+            });
     }
 
     compareFn(c1: any, c2: any): boolean {

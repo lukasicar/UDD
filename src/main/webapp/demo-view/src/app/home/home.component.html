@@ -6,16 +6,18 @@
 <br/><br/>
 
 <table border="1">
-	<tr><th>Title</th><th>Author</th><th>Publication Year</th><th>Jezik</th><th>Izmjeni</th><th *ngIf="type!='administrator'">Download</th></tr>
+	<tr><th>Title</th><th>Author</th><th>Publication Year</th><th>Jezik</th><th *ngIf="type=='administrator'">Izmjeni</th><th *ngIf="type!='administrator'">Download</th></tr>
   	<tr *ngFor="let book of books">
   		<td align="center">{{book.title}}</td>
   		<td align="center">{{book.author}}</td>
   		<td align="center">{{book.publicationYear}}</td>
   		<td align="center">{{book.language.name}}</td>
-  		<td align="center"><span class="glyphicon glyphicon-pencil" (click)="modify(book)"></span></td>
+  		<td align="center" *ngIf="type=='administrator'"><span class="glyphicon glyphicon-pencil" (click)="modify(book)"></span></td>
   		<td align="center" *ngIf="((cat==null||cat==selectedValue.name))">
-  			<span class="glyphicon glyphicon-download" *ngIf="type=='subscriber'"></span>
-  			<p *ngIf="type!='administrator'&&type!='subscriber'"></p>
+  			<a href="{{book.link}}" download >
+  				<span class="glyphicon glyphicon-download" *ngIf="type=='subscriber'"></span>
+  			</a>
+  			<p *ngIf="type!='administrator'&&type!='subscriber'">Loguj se</p>
   		</td>
   	</tr>
 </table> 

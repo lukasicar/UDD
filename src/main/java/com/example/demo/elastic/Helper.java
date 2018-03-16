@@ -2,12 +2,9 @@ package com.example.demo.elastic;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ResourceBundle;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,15 +15,15 @@ import com.example.demo.model.E_Book;
 @Service
 public class Helper {
 
-	private static String DATA_DIR_PATH;
+	//private static String DATA_DIR_PATH;
 	
 	@Autowired
 	private Indexer indexer;
 	
-	static {
+	/*static {
 		ResourceBundle rb=ResourceBundle.getBundle("application");
 		DATA_DIR_PATH=rb.getString("dataDir");
-	}
+	}*/
 	
 	public String saveUploadedFile(MultipartFile file) throws IOException {
     	String retVal = null;
@@ -43,14 +40,15 @@ public class Helper {
     }
 
     public void saveAndIndex(E_Book e_book) throws IOException{
-            IndexUnit indexUnit = new PDFHandler().getIndexUnit(new File(e_book.getFilename()));
-            indexUnit.setTitle(e_book.getTitle());
-            indexUnit.setKeywords(e_book.getKeywords());
-            indexUnit.setAuthor(e_book.getAuthor());
+    		IndexUnit indexUnit = new PDFHandler().getIndexUnit(new File(e_book.getFilename()));
+            indexUnit.setTitle(obradi(e_book.getTitle()));
+            indexUnit.setKeywords(obradi(e_book.getKeywords()));
+            indexUnit.setAuthor(obradi(e_book.getAuthor()));
             indexUnit.setFilename(e_book.getFilename());
+            indexUnit.setLanguage(e_book.getLanguage().getName());
             indexer.add(indexUnit);
     }
-	
+	/*
     private File getResourceFilePath(String path) {
 	    URL url = this.getClass().getClassLoader().getResource(path);
 	    File file = null;
@@ -60,5 +58,11 @@ public class Helper {
 	        file = new File(url.getPath());
 	    }   
 	    return file;
+	}*/
+    
+    private String obradi(String s) {
+		String x=s.toLowerCase();
+		x=CyrillicLatinConverter.cir2lat(x);
+		return x;
 	}
 }
